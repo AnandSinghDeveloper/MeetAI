@@ -81,6 +81,27 @@ const SignUpView = () => {
     );
   };
 
+    const onSocial = async(provider: "github" | "google") => {
+      setError(null);
+      setPending(true);
+  
+       await authClient.signIn.social(
+        {
+          provider: provider,
+          callbackURL:"/",
+        },
+        {
+          onSuccess: () => {
+            setPending(false);
+            
+          },
+          onError: (error) => {
+            setError(error.error.message);
+          },
+        }
+      );
+    };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className=" overflow-hidden p-0">
@@ -193,11 +214,8 @@ const SignUpView = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <Button
-                    onClick={() =>
-                      authClient.signIn.social({
-                        provider: "google",
-                      })
-                    }
+                    onClick={() => onSocial("google")}
+                    
                     variant={"outline"}
                     type="button"
                     className="w-full"
@@ -207,9 +225,7 @@ const SignUpView = () => {
                   </Button>
                   <Button
                     onClick={() =>
-                      authClient.signIn.social({
-                        provider: "github",
-                      })
+                     onSocial("github")
                     }
                     variant={"outline"}
                     type="button"

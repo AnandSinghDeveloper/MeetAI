@@ -74,11 +74,12 @@ const SignInView = () => {
      await authClient.signIn.social(
       {
         provider: provider,
+        callbackURL:"/",
       },
       {
         onSuccess: () => {
           setPending(false);
-          router.push(`/`);
+          
         },
         onError: (error) => {
           setError(error.error.message);
