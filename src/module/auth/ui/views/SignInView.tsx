@@ -62,24 +62,24 @@ const SignInView = () => {
         },
         onError: (error) => {
           setError(error.error.message);
+          setPending(false);
         },
       }
     );
   };
 
-  const onSocial = async(provider: "github" | "google") => {
+  const onSocial = async (provider: "github" | "google") => {
     setError(null);
     setPending(true);
 
-     await authClient.signIn.social(
+    await authClient.signIn.social(
       {
         provider: provider,
-        callbackURL:"/",
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setPending(false);
-          
         },
         onError: (error) => {
           setError(error.error.message);
@@ -192,7 +192,7 @@ const SignInView = () => {
               </div>
             </form>
           </Form>
-          <div className=" bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+          <div className=" bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
             <img src=" /logo.svg" alt="Image" className="h-[92px] w-[92px]" />
             {/* <p
               className={` ${funnelDisplay.className} text-2xl font-bold text-emerald-950`}

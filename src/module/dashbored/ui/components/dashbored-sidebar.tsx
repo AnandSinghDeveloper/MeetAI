@@ -3,6 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -17,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import DashboredUserButton from "./dashbored-user-button";
 
 const fristSection = [
   {
@@ -111,6 +113,9 @@ const DashboredSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <DashboredUserButton />
+      </SidebarFooter>
     </Sidebar>
   );
 };

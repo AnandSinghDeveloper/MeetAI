@@ -1,4 +1,5 @@
 import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
+import DashboredNavber from "@/module/dashbored/ui/components/dashbored-navber";
 import DashboredSidebar from "@/module/dashbored/ui/components/dashbored-sidebar";
 import React from "react";
 
@@ -10,6 +11,7 @@ const Layout = ({ children }: Props) => {
     <SidebarProvider>
       <DashboredSidebar />
       <main className="flex flex-col h-screen w-screen bg-muted">
+        <DashboredNavber />
         {children}
       </main>
     </SidebarProvider>
