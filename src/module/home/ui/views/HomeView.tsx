@@ -20,16 +20,7 @@ const HomeView = () => {
 
   return (
     <div className='flex flex-col p-4 gap-y-4'>
-      <p>Welcome {session.user.name}</p>
-      <Button onClick={async () => await authClient.signOut({
-        fetchOptions:{
-          onSuccess: () => {
-            router.push("/SignIn")
-          }
-        }
-      })}>
-        SignOut
-      </Button>
+      home view
     </div>
   )
 }
