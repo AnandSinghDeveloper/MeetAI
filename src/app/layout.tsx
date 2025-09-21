@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Funnel_Display } from "next/font/google";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
+import { Toaster } from "@/components/ui/sonner";
 
 const roboto = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
 });
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+const funnelDisplay = Funnel_Display({
+  variable: "--font-funnel-display",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -32,7 +30,10 @@ export default function RootLayout({
     <TRPCReactProvider>
       {" "}
       <html lang="en">
-        <body className={`${roboto.className} }  `}>{children}</body>
+        <body className={`${roboto.className}  ${funnelDisplay.style}  `}>
+          <Toaster />
+          {children}
+        </body>
       </html>
     </TRPCReactProvider>
   );

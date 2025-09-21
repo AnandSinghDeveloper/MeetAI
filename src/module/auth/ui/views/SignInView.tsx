@@ -22,7 +22,7 @@ import { authClient } from "@/lib/auth-client";
 import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Provider } from "@radix-ui/react-tooltip";
+
 
 const funnelDisplay = Funnel_Display({
   variable: "--font-funnel-display",

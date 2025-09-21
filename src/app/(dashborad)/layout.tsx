@@ -3,6 +3,7 @@ import DashboredNavber from "@/module/dashbored/ui/components/dashbored-navber";
 import DashboredSidebar from "@/module/dashbored/ui/components/dashbored-sidebar";
 import React from "react";
 
+
 interface Props {
   children: React.ReactNode;
 }
@@ -12,6 +13,7 @@ const Layout = ({ children }: Props) => {
       <DashboredSidebar />
       <main className="flex flex-col h-screen w-screen bg-muted">
         <DashboredNavber />
+      
         {children}
       </main>
     </SidebarProvider>
