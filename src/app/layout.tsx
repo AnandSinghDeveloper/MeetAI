@@ -4,6 +4,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next";
 
 const roboto = DM_Sans({
   variable: "--font-dm-sans",
@@ -14,7 +15,6 @@ const funnelDisplay = Funnel_Display({
   variable: "--font-funnel-display",
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,14 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <TRPCReactProvider>
-      {" "}
-      <html lang="en">
-        <body className={`${roboto.className}  ${funnelDisplay.style}  `}>
-          <Toaster />
-          {children}
-        </body>
-      </html>
-    </TRPCReactProvider>
+    <>
+      <NuqsAdapter>
+        <TRPCReactProvider>
+          {" "}
+          <html lang="en">
+            <body className={`${roboto.className}  ${funnelDisplay.style}  `}>
+              <Toaster />
+              {children}
+            </body>
+          </html>
+        </TRPCReactProvider>
+      </NuqsAdapter>
+    </>
   );
 }

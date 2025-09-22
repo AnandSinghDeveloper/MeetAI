@@ -4,6 +4,8 @@ import { PlusIcon } from "lucide-react";
 import React, { useState } from "react";
 import NewAgentDailog from "./new-agent-dailog";
 import { Funnel_Display } from "next/font/google";
+import SearchFilter from "./agent-search-filter";
+import { useAgentFilter } from "../../hooks/use-agent-filter";
 
 const funnelDisplay = Funnel_Display({
   variable: "--font-funnel-display",
@@ -11,7 +13,7 @@ const funnelDisplay = Funnel_Display({
 });
 
 const AgentListHeader = () => {
-
+  const [filter, setFilter]=useAgentFilter()
   const [isDialogOpen, setIsDialogOpen]= useState(false);
 
   return (
@@ -24,6 +26,9 @@ const AgentListHeader = () => {
             <PlusIcon className=" h-4 w-4" />
             Invite Agent
           </Button>
+        </div>
+        <div className=" flex items-center p-1 gap-x-2">
+          <SearchFilter/>
         </div>
       </div>
     </>
