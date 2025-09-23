@@ -1,4 +1,4 @@
-import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
+import {  SidebarProvider } from "@/components/ui/sidebar";
 import DashboredNavber from "@/module/dashbored/ui/components/dashbored-navber";
 import DashboredSidebar from "@/module/dashbored/ui/components/dashbored-sidebar";
 import React from "react";
