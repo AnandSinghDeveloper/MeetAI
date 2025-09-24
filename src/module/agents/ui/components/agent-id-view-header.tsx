@@ -4,10 +4,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 import {
   Breadcrumb,
@@ -17,7 +15,13 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  MoreVerticalIcon,
+  PencilIcon,
+  Trash2Icon,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   agentId: string;
@@ -36,15 +40,35 @@ const AgentIdViewHeader = ({ agentId, agentName, onEdit, onRemove }: Props) => {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator className=" text-foreground text-xl font-medium [&>svg]:size-4">
-          <ChevronRight className="text-muted-foreground" />
+            <ChevronRight className="text-muted-foreground" />
           </BreadcrumbSeparator>
-           <BreadcrumbItem>
-            <BreadcrumbLink asChild className=" font-medium text-xl text-foreground">
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              asChild
+              className=" font-medium text-xl text-foreground"
+            >
               <Link href={`/agents/${agentId}`}>{agentName}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"}>
+            <MoreVerticalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={onEdit}>
+            <PencilIcon className="size-4 text-black" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onRemove}>
+            <Trash2Icon className=" size-4 text-black" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
