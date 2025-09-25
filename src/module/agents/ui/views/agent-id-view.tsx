@@ -84,7 +84,8 @@ const AgentIdView = ({ agentId }: Props) => {
               variant="outline"
               className="flex items-center gap-x-2 [&>svg]:size-4"
             >
-              <VideoIcon className="size-4 text-blue-700 " />5 meetings
+              <VideoIcon className="size-4 text-blue-700 " />
+              {data.meetingCount}{data.meetingCount > 1 ? " Meetings" : " Meeting"}
             </Badge>
             <div className=" gap-y-4 flex flex-col">
               <p className=" text-lg font-medium">Instruction</p>
