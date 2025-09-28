@@ -1,7 +1,7 @@
 "use client";
-import React from "react"; 
+import React, { useState } from "react";
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { meetingsInsertSchema } from "../../schema";
 import z from "zod";
@@ -19,9 +19,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { MeetingsGetOne } from "../../type";
+import CommandSelect from "./command-select";
 
 interface MeetingFromProps {
-  onSuccess?: (id?:string) => void;
+  onSuccess?: (id?: string) => void;
   onCancel?: () => void;
   initialValues?: MeetingsGetOne;
 }
@@ -34,6 +35,14 @@ const MeetingFrom = ({
   const trpc = useTRPC();
   // const router = useRouter();
   const queryClient = useQueryClient();
+
+  const [open, setOpen] = useState(false);
+  const [agentSearch, setAgentSearch]= useState("");
+
+  const agents = useQuery(trpc.agents.getMany.queryOptions({
+    search: agentSearch,
+     pageSize: 100
+  }));
 
   const createMeeting = useMutation(
     trpc.meetings.create.mutationOptions({
@@ -99,8 +108,6 @@ const MeetingFrom = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        
-
         <FormField
           name="name"
           control={form.control}
@@ -114,7 +121,30 @@ const MeetingFrom = ({
             </FormItem>
           )}
         />
+         <FormField
+          name="agentId"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="pt-2">Agent</FormLabel>
+              <FormControl>
+                <CommandSelect options={(agents.data?.items ?? []).map((agent) =>({
+                  id: agent.idl,
+                  value: agent.id
+                  ,children: (
+                    <div>
 
+                    </div>
+                  )
+
+                }) )} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         
+         
         <div className="flex justify-between gap-x-2 pt-4">
           {onCancel && (
             <Button

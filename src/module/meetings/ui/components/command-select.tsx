@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { CommandResponsiveDialog } from "@/components/ui/command";
+import {
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandResponsiveDialog,
+} from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { ChevronsUpDownIcon } from "lucide-react";
+import { ChevronsUpDownIcon, Command } from "lucide-react";
 import React, { useState } from "react";
 
 interface Props {
-  option: Array<{
+  options: Array<{
     id: string;
     value: string;
     children: React.ReactNode;
@@ -19,7 +25,7 @@ interface Props {
 }
 
 const CommandSelect = ({
-  option,
+  options,
   onSelect,
   onSearch,
   value,
@@ -28,7 +34,7 @@ const CommandSelect = ({
   placeholder,
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const selectedOption = option.find((option) => option.id === value);
+  const selectedOption = options.find((option) => option.id === value);
   return (
     <>
       <Button
@@ -41,13 +47,27 @@ const CommandSelect = ({
         )}
       >
         <div>{selectedOption?.children ?? placeholder}</div>
-        <ChevronsUpDownIcon/>
+        <ChevronsUpDownIcon />
       </Button>
-      <CommandResponsiveDialog>
-         {/* console.log("dfjgnsgdjhns"); */}
-         
+      <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Find a meeting or Agent..." />
+        <CommandList>
+          <CommandEmpty>
+            <span className="text-muted-foreground">No results found.</span>
+          </CommandEmpty>
+          {options.map((options) => (
+            <CommandItem
+              key={options.id}
+              onSelect={() => {
+                onSelect(options.id);
+                setOpen(false);
+              }}
+            >
+              {options.children}
+            </CommandItem>
+          ))}
+        </CommandList>
       </CommandResponsiveDialog>
-
     </>
   );
 };
