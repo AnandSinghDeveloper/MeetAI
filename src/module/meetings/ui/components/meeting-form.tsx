@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,6 +21,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { MeetingsGetOne } from "../../type";
 import CommandSelect from "./command-select";
+import NewAgentDailog from "@/module/agents/ui/components/new-agent-dailog";
+
 
 interface MeetingFromProps {
   onSuccess?: (id?: string) => void;
@@ -36,7 +39,7 @@ const MeetingFrom = ({
   // const router = useRouter();
   const queryClient = useQueryClient();
 
-  const [open, setOpen] = useState(false);
+  const [openNewAgentDailog, setOpenNewAgentDailog] = useState(false);
   const [agentSearch, setAgentSearch]= useState("");
 
   const agents = useQuery(trpc.agents.getMany.queryOptions({
@@ -106,6 +109,8 @@ const MeetingFrom = ({
   };
 
   return (
+   <>
+   <NewAgentDailog open={openNewAgentDailog} onOpenChange={setOpenNewAgentDailog} />
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
@@ -129,16 +134,30 @@ const MeetingFrom = ({
               <FormLabel className="pt-2">Agent</FormLabel>
               <FormControl>
                 <CommandSelect options={(agents.data?.items ?? []).map((agent) =>({
-                  id: agent.idl,
-                  value: agent.id
-                  ,children: (
-                    <div>
-
+                  id: agent.id,
+                  value: agent.id,
+                  children: (
+                    <div className="flex items-center gap-x-2">
+                     <GeneratedAvtar seed={agent.name} varient="botttsNeutral" className="size-6 border" />
+                     <span>{agent.name}</span>
                     </div>
                   )
 
-                }) )} />
+                }) )}
+                onSelect={field.onChange}
+                value={field.value}
+                onSearch={setAgentSearch}
+                placeholder="Select an Agent"
+                
+                />
               </FormControl>
+              <FormDescription>
+                No Found an Agent?{" "}
+
+                <button className="text-primary hover:underline " type="button" onClick={() => setOpenNewAgentDailog(true)}>
+                Create New Agent
+                </button>
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -164,7 +183,7 @@ const MeetingFrom = ({
           </Button>
         </div>
       </form>
-    </Form>
+    </Form></>
   );
 };
 

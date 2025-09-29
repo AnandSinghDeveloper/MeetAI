@@ -23,7 +23,7 @@ const NewMeetingDailog = ({ open, onOpenChange }: Props) => {
       onOpenChange(false);
       router.push(`/meetings/${id}`);
      }}
-     onCancel={()=>onOpenChange}
+     onCancel={()=>onOpenChange(false)}
      />
       
     </ResponsiveDailog>

@@ -38,6 +38,7 @@ const CommandSelect = ({
   return (
     <>
       <Button
+        onClick={() => setOpen(true)}
         type="button"
         variant={"outline"}
         className={cn(
