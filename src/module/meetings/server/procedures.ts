@@ -1,8 +1,8 @@
 import { db } from "@/db";
-import { meetings } from "@/db/schema";
+import { agents, meetings } from "@/db/schema";
 import { createTRPCRouter, protactedProcedure } from "@/trpc/init";
 import z from "zod";
-import { and, desc, eq, ilike, count, getTableColumns } from "drizzle-orm";
+import { and, desc, eq, ilike, count, getTableColumns, sql } from "drizzle-orm";
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
@@ -13,24 +13,26 @@ import { TRPCError } from "@trpc/server";
 import { meetingsInsertSchema, meetingsUpdateSchema } from "../schema";
 
 export const meetingsRouter = createTRPCRouter({
+  update: protactedProcedure
+    .input(meetingsUpdateSchema)
+    .mutation(async ({ input, ctx }) => {
+      const [updatedMeeting] = await db
+        .update(meetings)
+        .set(input)
+        .where(
+          and(eq(meetings.id, input.id), eq(meetings.userId, ctx.auth.user.id))
+        )
+        .returning();
 
-    update: protactedProcedure
-      .input(meetingsUpdateSchema)
-      .mutation(async ({ input, ctx }) => {
-        const [updatedMeeting] = await db
-          .update(meetings)
-          .set(input)
-          .where(
-            and(eq(meetings.id, input.id), eq(meetings.userId, ctx.auth.user.id))
-          )
-          .returning();
-  
-        if (!updatedMeeting) {
-          throw new TRPCError({ code: "NOT_FOUND", message: "Meeting not found" });
-        }
-  
-        return updatedMeeting;
-      }),
+      if (!updatedMeeting) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Meeting not found",
+        });
+      }
+
+      return updatedMeeting;
+    }),
   create: protactedProcedure
     .input(meetingsInsertSchema)
     .mutation(async ({ input, ctx }) => {
@@ -78,8 +80,15 @@ export const meetingsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { page, pageSize, search } = input;
       const data = await db
-        .select({ ...getTableColumns(meetings) })
+        .select({
+          ...getTableColumns(meetings),
+          agent: agents,
+          duration: sql<number>`EXTRACT(EPOCH FROM (ended_at - started_at))`.as(
+            "duration"
+          ),
+        })
         .from(meetings)
+        .innerJoin(agents, eq(meetings.agentId, agents.id))
         .where(
           and(
             eq(meetings.userId, ctx.auth.user.id),
@@ -93,6 +102,7 @@ export const meetingsRouter = createTRPCRouter({
       const [total] = await db
         .select({ count: count() })
         .from(meetings)
+        .innerJoin(agents, eq(meetings.agentId, agents.id))
         .where(
           and(
             eq(meetings.userId, ctx.auth.user.id),
