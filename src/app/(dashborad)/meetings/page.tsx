@@ -9,10 +9,17 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { SearchParams } from "nuqs/server";
+import { loadsearchParams } from "@/module/meetings/params";
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-const page = async () => {
+interface Props  {
+  searchParams: Promise<SearchParams>
+}
+const page = async ({ searchParams }: Props) => {
+  const filter = await loadsearchParams(searchParams);
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -21,7 +28,9 @@ const page = async () => {
     redirect("/SignIn");
   }
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.meetings.getMany.queryOptions({}));
+  void queryClient.prefetchQuery(trpc.meetings.getMany.queryOptions({
+   ...filter, 
+  }));
 
   return (
     <>
