@@ -1,0 +1,38 @@
+"use client";
+
+import { authClient } from "@/lib/auth-client";
+import { TbLoader3 } from "react-icons/tb";
+import CallConnect from "./call-connect";
+import { genrateAvatarUri } from "@/lib/avatar";
+
+interface CallProviderProps {
+  meetingId: string;
+  meetingName: string;
+}
+
+const CallProvider = ({ meetingId, meetingName }: CallProviderProps) => {
+  const { data, isPending } = authClient.useSession();
+
+  if (!data || isPending) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-radial from-sidebar-accent to-sidebar">
+        <TbLoader3 className="animate-spin size-6 text-white" />
+      </div>
+    );
+  }
+
+  return (
+    <CallConnect
+      meetingId={meetingId}
+      meetingName={meetingName}
+      userId={data.user.id}
+      userName={data.user.name}
+      userImage={
+        data.user.image ??
+        genrateAvatarUri({ seed: data.user.name, varient: "initials" })
+      }
+    />
+  );
+};
+
+export default CallProvider;
