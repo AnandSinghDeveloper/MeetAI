@@ -8,7 +8,7 @@ import {
 
 import { useEffect, useState } from "react";
 
-// import "@stream-io/video-react-sdk/dist/css/styles.css";
+import "@stream-io/video-react-sdk/dist/css/styles.css";
 
 import { useTRPC } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
